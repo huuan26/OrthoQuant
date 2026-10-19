@@ -19,16 +19,16 @@ Throughout this framework, all mathematical objects are strictly defined as foll
 
 | Symbol | Mathematical Domain | Description |
 | :--- | :--- | :--- |
-| $N \in \mathbb{N}$ | Dimension | Number of assets in the cross-sectional universe ($N \ge K$) |
-| $K \in \mathbb{N}$ | Dimension | Number of candidate alpha factors |
-| $M \in \mathbb{N}$ | Dimension | Number of common risk exposures ($M < N$) |
-| $\mathbf{F} \in \mathbb{R}^{N \times K}$ | Matrix | Factor matrix, $\mathbf{F} = [\mathbf{f}_1, \dots, \mathbf{f}_K]$, where $\mathbf{f}_k \in \mathbb{R}^N$ is factor $k$ |
-| $\mathbf{X} \in \mathbb{R}^{N \times M}$ | Matrix | Risk exposure matrix (e.g., sector dummy one-hots, Market Beta, Size) |
-| $\mathbf{I}_K \in \mathbb{R}^{K \times K}$ | Matrix | Identity matrix of size $K \times K$ |
-| $\mathcal{V}_K(\mathbb{R}^N)$ | Stiefel Manifold | Set of $N \times K$ orthonormal matrices: $\{ \mathbf{Q} \in \mathbb{R}^{N \times K} : \mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K \}$ |
-| $\|\cdot\|_F$ | Matrix Norm | Frobenius norm: $\lVert \mathbf{A} \rVert_F = \sqrt{\mathrm{Tr}(\mathbf{A}^T \mathbf{A})} = \sqrt{\sum_{i,j} a_{ij}^2}$ |
-| $\mathrm{Tr}(\cdot)$ | Operator | Matrix trace: $\mathrm{Tr}(\mathbf{A}) = \sum_i a_{ii}$ |
-| $\kappa_2(\cdot)$ | Metric | Matrix condition number: $\kappa_2(\mathbf{A}) = \sigma_{\max}(\mathbf{A}) / \sigma_{\min}(\mathbf{A})$ |
+| $`N \in \mathbb{N}`$ | Dimension | Number of assets in the cross-sectional universe ($`N \ge K`$) |
+| $`K \in \mathbb{N}`$ | Dimension | Number of candidate alpha factors |
+| $`M \in \mathbb{N}`$ | Dimension | Number of common risk exposures ($`M < N`$) |
+| $`\mathbf{F} \in \mathbb{R}^{N \times K}`$ | Matrix | Factor matrix, $`\mathbf{F} = [\mathbf{f}_1, \dots, \mathbf{f}_K]`$, where $`\mathbf{f}_k \in \mathbb{R}^N`$ is factor $`k`$ |
+| $`\mathbf{X} \in \mathbb{R}^{N \times M}`$ | Matrix | Risk exposure matrix (e.g., sector dummy one-hots, Market Beta, Size) |
+| $`\mathbf{I}_K \in \mathbb{R}^{K \times K}`$ | Matrix | Identity matrix of size $`K \times K`$ |
+| $`\mathcal{V}_K(\mathbb{R}^N)`$ | Stiefel Manifold | Set of $`N \times K`$ orthonormal matrices: $`\{ \mathbf{Q} \in \mathbb{R}^{N \times K} : \mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K \}`$ |
+| $`\|\cdot\|_F`$ | Matrix Norm | Frobenius norm: $`\lVert \mathbf{A} \rVert_F = \sqrt{\mathrm{Tr}(\mathbf{A}^T \mathbf{A})} = \sqrt{\sum_{i,j} a_{ij}^2}`$ |
+| $`\mathrm{Tr}(\cdot)`$ | Operator | Matrix trace: $`\mathrm{Tr}(\mathbf{A}) = \sum_i a_{ii}`$ |
+| $`\kappa_2(\cdot)`$ | Metric | Matrix condition number: $`\kappa_2(\mathbf{A}) = \sigma_{\max}(\mathbf{A}) / \sigma_{\min}(\mathbf{A})`$ |
 
 ---
 
@@ -37,37 +37,37 @@ Throughout this framework, all mathematical objects are strictly defined as foll
 ### 1. Löwdin Symmetric Orthogonalization
 
 #### Problem Statement
-Given candidate alpha signals $\mathbf{F} \in \mathbb{R}^{N \times K}$ with $\mathrm{rank}(\mathbf{F}) = K$, we seek an orthonormal factor matrix $\mathbf{\tilde{F}} \in \mathcal{V}_K(\mathbb{R}^N)$ that minimizes the total Frobenius distortion from the original signals:
+Given candidate alpha signals $`\mathbf{F} \in \mathbb{R}^{N \times K}`$ with $`\mathrm{rank}(\mathbf{F}) = K`$, we seek an orthonormal factor matrix $`\widetilde{\mathbf{F}} \in \mathcal{V}_K(\mathbb{R}^N)`$ that minimizes the total Frobenius distortion from the original signals:
 
-$$\min_{\mathbf{\tilde{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \mathbf{\tilde{F}} \rVert_F^2 \quad \text{subject to} \quad \mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}_K \tag{1}$$
+$$\min_{\widetilde{\mathbf{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 \quad \text{subject to} \quad \widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K \tag{1}$$
 
 #### Theorem 1 (Optimality & Polar Decomposition)
 
 The unique global minimizer to (1) is:
 
-$$\mathbf{\tilde{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \tag{2}$$
+$$\widetilde{\mathbf{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \tag{2}$$
 
-where $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$ is the thin Singular Value Decomposition (SVD) of $\mathbf{F}$ ($\mathbf{U} \in \mathbb{R}^{N \times K}$, $\mathbf{\Sigma} = \mathrm{diag}(\sigma_1, \dots, \sigma_K) \succ 0$, $\mathbf{V} \in \mathbb{R}^{K \times K}$).
+where $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$ is the thin Singular Value Decomposition (SVD) of $`\mathbf{F}`$ ($`\mathbf{U} \in \mathbb{R}^{N \times K}`$, $`\mathbf{\Sigma} = \mathrm{diag}(\sigma_1, \dots, \sigma_K) \succ 0`$, $`\mathbf{V} \in \mathbb{R}^{K \times K}`$).
 
-*Proof Sketch:* Expanding $\lVert \mathbf{F} - \mathbf{\tilde{F}} \rVert_F^2 = \mathrm{Tr}(\mathbf{F}^T \mathbf{F}) - 2 \mathrm{Tr}(\mathbf{\tilde{F}}^T \mathbf{F}) + \mathrm{Tr}(\mathbf{I}_K)$, minimizing distance is equivalent to maximizing trace overlap $\max_{\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}} \mathrm{Tr}(\mathbf{\tilde{F}}^T \mathbf{F})$. Substituting SVD $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$, we have $\mathrm{Tr}(\mathbf{\tilde{F}}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \mathrm{Tr}(\mathbf{Z}^T \mathbf{\Sigma})$ where $\mathbf{Z} \triangleq \mathbf{U}^T \mathbf{\tilde{F}} \mathbf{V}$. Since $\lVert \mathbf{Z} \rVert_2 \le 1$, $\lvert z_{kk} \rvert \le 1$, the upper bound $\sum_k \sigma_k$ is attained if and only if $\mathbf{Z} = \mathbf{I}_K \iff \mathbf{\tilde{F}} = \mathbf{U} \mathbf{V}^T$. $\blacksquare$ (See [docs/mathematical_formulation.md](docs/mathematical_formulation.md) for full proof; cf. Löwdin (1950), Higham (1988)).
+*Proof Sketch:* Expanding $`\lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 = \mathrm{Tr}(\mathbf{F}^T \mathbf{F}) - 2 \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F}) + \mathrm{Tr}(\mathbf{I}_K)`$, minimizing distance is equivalent to maximizing trace overlap $`\max_{\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}} \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F})`$. Substituting SVD $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$, we have $`\mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \mathrm{Tr}(\mathbf{Z}^T \mathbf{\Sigma})`$ where $`\mathbf{Z} \triangleq \mathbf{U}^T \widetilde{\mathbf{F}} \mathbf{V}`$. Since $`\lVert \mathbf{Z} \rVert_2 \le 1`$, $`\lvert z_{kk} \rvert \le 1`$, the upper bound $`\sum_k \sigma_k`$ is attained if and only if $`\mathbf{Z} = \mathbf{I}_K \iff \widetilde{\mathbf{F}} = \mathbf{U} \mathbf{V}^T`$. $`\blacksquare`$ (See [docs/mathematical_formulation.md](docs/mathematical_formulation.md) for full proof; cf. Löwdin (1950), Higham (1988)).
 
 #### Theorem 2 (Permutation Symmetry / Equivariance)
 
-Let $\mathbf{P} \in \mathbb{R}^{K \times K}$ be any permutation matrix ($\mathbf{P}^T \mathbf{P} = \mathbf{I}_K$). If factors are permuted as $\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}$, then:
+Let $`\mathbf{P} \in \mathbb{R}^{K \times K}`$ be any permutation matrix ($`\mathbf{P}^T \mathbf{P} = \mathbf{I}_K`$). If factors are permuted as $`\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}`$, then:
 
-$$\mathbf{\tilde{F}}_{\pi} = \mathbf{\tilde{F}} \mathbf{P} \tag{3}$$
+$$\widetilde{\mathbf{F}}_{\pi} = \widetilde{\mathbf{F}} \mathbf{P} \tag{3}$$
 
-*Proof Sketch:* $(\mathbf{F} \mathbf{P})((\mathbf{F} \mathbf{P})^T (\mathbf{F} \mathbf{P}))^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S} \mathbf{P})^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S}^{-1/2} \mathbf{P}) = \mathbf{F} \mathbf{S}^{-1/2} \mathbf{P} = \mathbf{\tilde{F}} \mathbf{P}$. $\blacksquare$
+*Proof Sketch:* $`(\mathbf{F} \mathbf{P})((\mathbf{F} \mathbf{P})^T (\mathbf{F} \mathbf{P}))^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S} \mathbf{P})^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S}^{-1/2} \mathbf{P}) = \mathbf{F} \mathbf{S}^{-1/2} \mathbf{P} = \widetilde{\mathbf{F}} \mathbf{P}`$. $`\blacksquare`$
 
 ---
 
 ### 2. Frisch–Waugh–Lovell Cross-Sectional Risk Neutralization
 
-Let $\mathbf{X} \in \mathbb{R}^{N \times M}$ be the risk exposure matrix ($M < N$). Regressing factors on risk exposures:
+Let $`\mathbf{X} \in \mathbb{R}^{N \times M}`$ be the risk exposure matrix ($`M < N`$). Regressing factors on risk exposures:
 
 $$\mathbf{F} = \mathbf{X} \mathbf{B} + \mathbf{\mathcal{E}}, \quad \text{where } \mathbf{B} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{F}$$
 
-The residual factor matrix $\mathbf{F}_{\text{neutral}} = \mathbf{\mathcal{E}}$ is the orthogonal projection onto the null space of $\mathbf{X}^T$:
+The residual factor matrix $`\mathbf{F}_{\text{neutral}} = \mathbf{\mathcal{E}}`$ is the orthogonal projection onto the null space of $`\mathbf{X}^T`$:
 
 $$\mathbf{F}_{\text{neutral}} = \mathbf{M}_X \mathbf{F} = (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) \mathbf{F} \tag{4}$$
 
@@ -75,16 +75,16 @@ $$\mathbf{F}_{\text{neutral}} = \mathbf{M}_X \mathbf{F} = (\mathbf{I}_N - \mathb
 
 $$\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K} \tag{5}$$
 
-*Proof:* $\mathbf{X}^T \mathbf{M}_X = \mathbf{X}^T (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) = \mathbf{X}^T - (\mathbf{X}^T \mathbf{X})(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{0}$. $\blacksquare$ (Frisch & Waugh 1933; Lovell 1963).
+*Proof:* $`\mathbf{X}^T \mathbf{M}_X = \mathbf{X}^T (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) = \mathbf{X}^T - (\mathbf{X}^T \mathbf{X})(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{0}`$. $`\blacksquare`$ (Frisch & Waugh 1933; Lovell 1963).
 
 #### Theorem 4 (Numerical Stability via QR Decomposition)
 
-Let $\mathbf{X} = \mathbf{Q}_X \mathbf{R}_X$ be the thin QR decomposition of $\mathbf{X}$ ($\mathbf{Q}_X^T \mathbf{Q}_X = \mathbf{I}_M$, $\mathbf{R}_X$ invertible). Then:
+Let $`\mathbf{X} = \mathbf{Q}_X \mathbf{R}_X`$ be the thin QR decomposition of $`\mathbf{X}`$ ($`\mathbf{Q}_X^T \mathbf{Q}_X = \mathbf{I}_M`$, $`\mathbf{R}_X`$ invertible). Then:
 
 $$\mathbf{M}_X \mathbf{F} = \mathbf{F} - \mathbf{Q}_X (\mathbf{Q}_X^T \mathbf{F}) \tag{6}$$
 
-*Proof:* $\mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{Q}_X^T \mathbf{Q}_X \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{Q}_X^T$. $\blacksquare$  
-This formulation eliminates explicit inversion of $\mathbf{X}^T \mathbf{X}$, reducing the condition number from $\kappa(\mathbf{X})^2$ to $\kappa(\mathbf{X})$.
+*Proof:* $`\mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{Q}_X^T \mathbf{Q}_X \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{Q}_X^T`$. $`\blacksquare`$  
+This formulation eliminates explicit inversion of $`\mathbf{X}^T \mathbf{X}`$, reducing the condition number from $`\kappa(\mathbf{X})^2`$ to $`\kappa(\mathbf{X})`$.
 
 ---
 
@@ -92,29 +92,29 @@ This formulation eliminates explicit inversion of $\mathbf{X}^T \mathbf{X}$, red
 
 #### Variance Inflation Factor (VIF)
 
-For standardized factors $\mathbf{Z} \in \mathbb{R}^{N \times K}$ with correlation matrix $\mathbf{C} = \frac{1}{N-1} \mathbf{Z}^T \mathbf{Z}$:
+For standardized factors $`\mathbf{Z} \in \mathbb{R}^{N \times K}`$ with correlation matrix $`\mathbf{C} = \frac{1}{N-1} \mathbf{Z}^T \mathbf{Z}`$:
 
 $$\mathrm{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \tag{7}$$
 
-where $R_k^2$ is the coefficient of determination from regressing factor $k$ on all other $K-1$ factors (Belsley et al., 2005).  
-For orthogonal factors, $\mathbf{C} = \mathbf{I}_K \implies \mathrm{VIF}_k = 1.0$ for all $k$.
+where $`R_k^2`$ is the coefficient of determination from regressing factor $`k`$ on all other $`K-1`$ factors (Belsley et al., 2005).  
+For orthogonal factors, $`\mathbf{C} = \mathbf{I}_K \implies \mathrm{VIF}_k = 1.0`$ for all $`k`$.
 
 #### Effective Number of Factors (ENF)
 
-Using the spectral entropy of the eigenvalue distribution $p_k = \lambda_k / K$ of $\mathbf{C}$ (Meucci, 2009):
+Using the spectral entropy of the eigenvalue distribution $`p_k = \lambda_k / K`$ of $`\mathbf{C}`$ (Meucci, 2009):
 
 $$\mathrm{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \tag{8}$$
 
-- $\mathrm{ENF} = 1.0$: Completely collinear factors (rank 1).
-- $\mathrm{ENF} = K$: Completely orthogonal factors (maximum spectral entropy).
+- $`\mathrm{ENF} = 1.0`$: Completely collinear factors (rank 1).
+- $`\mathrm{ENF} = K`$: Completely orthogonal factors (maximum spectral entropy).
 
-#### Theorem 5 ($R^2$ Additivity Under Orthogonality)
+#### Theorem 5 ($`R^2`$ Additivity Under Orthogonality)
 
-If factors $\mathbf{Q} \in \mathcal{V}_K(\mathbb{R}^N)$ are orthonormal ($\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K$), then in the multiple regression $\mathbf{y} = \sum_{k=1}^K \beta_k \mathbf{q}_k + \boldsymbol{\varepsilon}$, the overall $R^2$ decomposes strictly additively:
+If factors $`\mathbf{Q} \in \mathcal{V}_K(\mathbb{R}^N)`$ are orthonormal ($`\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K`$), then in the multiple regression $`\mathbf{y} = \sum_{k=1}^K \beta_k \mathbf{q}_k + \boldsymbol{\varepsilon}`$, the overall $`R^2`$ decomposes strictly additively:
 
 $$R^2_{\text{total}} = \sum_{k=1}^K R^2_k \tag{9}$$
 
-*Proof:* Since $\mathbf{q}_i^T \mathbf{q}_j = 0$ for $i \ne j$, cross-terms $\beta_i \beta_j \mathbf{q}_i^T \mathbf{q}_j$ vanish identically from the regression sum of squares $\lVert \sum_k \beta_k \mathbf{q}_k \rVert^2 = \sum_k \beta_k^2 \lVert \mathbf{q}_k \rVert^2$. $\blacksquare$
+*Proof:* Since $`\mathbf{q}_i^T \mathbf{q}_j = 0`$ for $`i \ne j`$, cross-terms $`\beta_i \beta_j \mathbf{q}_i^T \mathbf{q}_j`$ vanish identically from the regression sum of squares $`\lVert \sum_k \beta_k \mathbf{q}_k \rVert^2 = \sum_k \beta_k^2 \lVert \mathbf{q}_k \rVert^2`$. $`\blacksquare`$
 
 ---
 
@@ -122,10 +122,10 @@ $$R^2_{\text{total}} = \sum_{k=1}^K R^2_k \tag{9}$$
 
 | Dimension | Löwdin Symmetric | Gram-Schmidt | Principal Component Analysis (PCA) |
 | :--- | :--- | :--- | :--- |
-| **Orthogonality** | $\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}$ | $\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}$ | $\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}$ |
+| **Orthogonality** | $`\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}`$ | $`\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}`$ | $`\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}`$ |
 | **Order Symmetry** | **Yes** (Permutation Symmetric) | **No** (Order-dependent) | **No** (Sorted by eigenvalue variance) |
 | **Interpretability** | **High** (Columns align 1-to-1 with original factors) | Medium (First factor pure, rest mixed) | **Low** (Synthetic eigenvectors lose factor meaning) |
-| **Distortion Metric** | **Minimum Frobenius Distance** ($\min \|\mathbf{F} - \mathbf{\tilde{F}}\|_F$) | Sub-optimal | Maximizes variance, not signal fidelity |
+| **Distortion Metric** | **Minimum Frobenius Distance** ($`\min \|\mathbf{F} - \widetilde{\mathbf{F}}\|_F`$) | Sub-optimal | Maximizes variance, not signal fidelity |
 | **Recommended Use** | Multi-factor quantitative equity models | Hierarchical signal protection (Core + Satellites) | Dimension reduction / Statistical factor models |
 
 ---
