@@ -1,5 +1,12 @@
 """Löwdin Symmetric Factor Orthogonalization.
 
+Notation:
+    - N: Number of assets (rows).
+    - K: Number of factors (columns), N >= K.
+    - F in R^{N x K}: Factor matrix with rank(F) = K.
+    - I_K in R^{K x K}: Identity matrix.
+    - ||.||_F: Frobenius matrix norm, ||A||_F = sqrt(Tr(A^T A)).
+
 Formulation:
     Given a factor matrix F in R^{N x K} representing K alpha signals on N assets,
     Löwdin symmetric orthogonalization finds the orthogonal matrix F_tilde in R^{N x K}
@@ -18,6 +25,14 @@ Formulation:
     which represents the unitary polar factor in the polar decomposition of F.
     Unlike Gram-Schmidt, Löwdin is permutation-symmetric and treats all factors
     symmetrically without preferential bias toward any specific input order.
+
+References:
+    - Löwdin, P.-O. (1950). "On the non-orthogonality problem connected with the use
+      of atomic wave functions in the theory of molecules and crystals".
+      The Journal of Chemical Physics, 18(3), 365–375.
+    - Higham, N. J. (1988). "Computing a nearest symmetric positive semidefinite matrix".
+      Linear Algebra and its Applications, 103, 103–118.
+    - Golub, G. H., & Van Loan, C. F. (2013). Matrix Computations (4th ed.), Section 8.4.
 """
 
 from typing import Tuple, Union

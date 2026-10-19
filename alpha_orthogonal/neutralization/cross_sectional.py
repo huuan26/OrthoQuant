@@ -1,5 +1,14 @@
 """Cross-Sectional Factor Risk Neutralization via Projection.
 
+Notation:
+    - N: Number of assets (rows).
+    - K: Number of factors (columns).
+    - M: Number of risk exposures (columns), M < N.
+    - F in R^{N x K}: Factor signal matrix.
+    - X in R^{N x M}: Risk exposure matrix with rank(X) = M.
+    - P_X = X (X^T X)^{-1} X^T: Projection matrix onto Col(X).
+    - M_X = I_N - P_X: Annihilator matrix projecting onto Col(X)^perp.
+
 Formulation:
     Given factor signals F in R^{N x K} and a risk exposure matrix X in R^{N x M}
     (e.g., sector dummy one-hots, Market Beta, Log-Market Cap, Style factors),
@@ -22,6 +31,14 @@ Formulation:
         Then the projection simplifies to:
             F_neutral = F - Q_X (Q_X^T F)
         which avoids matrix inversion entirely and guarantees machine-precision stability.
+
+References:
+    - Frisch, R., & Waugh, F. V. (1933). "Partial time regressions as compared with individual trends".
+      Econometrica, 1(4), 387–401.
+    - Lovell, M. C. (1963). "Seasonal adjustment of economic time series and multiple regression analysis".
+      Journal of the American Statistical Association, 58(304), 993–1010.
+    - Kakushadze, Z. (2015). "Factor models and alpha streams".
+      The Journal of Investment Strategies, 5(1), 1–45.
 """
 
 from typing import Optional, Union

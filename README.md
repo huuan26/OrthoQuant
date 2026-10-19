@@ -9,68 +9,90 @@
 
 Designed for quantitative researchers, portfolio managers, and statistical arbitrage teams to eliminate multicollinearity across alpha signals while mathematically minimizing signal distortion.
 
----
-
-## Key Features
-
-1. **Löwdin Symmetric Orthogonalization ($\mathbf{S}^{-1/2}$ Transform)**:
-   - Symmetrically decouples correlated signals using Polar Decomposition / SVD.
-   - Mathematically proven to minimize the total Frobenius distance to the original factors:
-     $$\min_{\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}} \|\mathbf{F} - \mathbf{\tilde{F}}\|_F^2$$
-   - Treats all factors symmetrically without arbitrary order-dependent bias.
-2. **Frisch–Waugh–Lovell Cross-Sectional Risk Neutralization**:
-   - Strips common risk factors (Market Beta, Size, Volatility, Sector one-hot dummies) using QR projection:
-     $$\mathbf{F}_{\text{neutral}} = (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) \mathbf{F}$$
-   - Supports both unweighted (OLS) and market-cap-weighted (WLS) risk residualization.
-3. **Sequential / Hierarchical Gram-Schmidt**:
-   - Preserves core proprietary alphas while orthogonalizing secondary candidates.
-4. **Collinearity & Signal Distortion Metrics**:
-   - Variance Inflation Factor (VIF), Condition Number $\kappa$, Effective Number of Factors (ENF), Frobenius distortion, and cross-sectional Rank IC / Pearson IC.
-5. **Zero External Heavy Dependencies**:
-   - Built purely on NumPy, SciPy, and Pandas. Fast and fully vectorized.
+> 📖 **Full Mathematical Derivations**: Complete proofs, lemmas, and spectral analyses are documented in [docs/mathematical_formulation.md](docs/mathematical_formulation.md).
 
 ---
 
-## Mathematical Formulation
+## Mathematical Notation & Definitions
+
+Throughout this framework, all mathematical objects are strictly defined as follows:
+
+| Symbol | Mathematical Domain | Description |
+| :--- | :--- | :--- |
+| $N \in \mathbb{N}$ | Dimension | Number of assets in the cross-sectional universe ($N \ge K$) |
+| $K \in \mathbb{N}$ | Dimension | Number of candidate alpha factors |
+| $M \in \mathbb{N}$ | Dimension | Number of common risk exposures ($M < N$) |
+| $\mathbf{F} \in \mathbb{R}^{N \times K}$ | Matrix | Factor matrix, $\mathbf{F} = [\mathbf{f}_1, \dots, \mathbf{f}_K]$, where $\mathbf{f}_k \in \mathbb{R}^N$ is factor $k$ |
+| $\mathbf{X} \in \mathbb{R}^{N \times M}$ | Matrix | Risk exposure matrix (e.g., sector dummy one-hots, Market Beta, Size) |
+| $\mathbf{I}_K \in \mathbb{R}^{K \times K}$ | Matrix | Identity matrix of size $K \times K$ |
+| $\mathcal{V}_K(\mathbb{R}^N)$ | Stiefel Manifold | Set of $N \times K$ orthonormal matrices: $\{ \mathbf{Q} \in \mathbb{R}^{N \times K} : \mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K \}$ |
+| $\|\cdot\|_F$ | Matrix Norm | Frobenius norm: $\|\mathbf{A}\|_F = \sqrt{\operatorname{Tr}(\mathbf{A}^T \mathbf{A})} = \sqrt{\sum_{i,j} a_{ij}^2}$ |
+| $\operatorname{Tr}(\cdot)$ | Operator | Matrix trace: $\operatorname{Tr}(\mathbf{A}) = \sum_i a_{ii}$ |
+| $\kappa_2(\cdot)$ | Metric | Matrix condition number: $\kappa_2(\mathbf{A}) = \sigma_{\max}(\mathbf{A}) / \sigma_{\min}(\mathbf{A})$ |
+
+---
+
+## Mathematical Formulation & Theorems
 
 ### 1. Löwdin Symmetric Orthogonalization
 
-In multi-factor alpha modeling, candidate signals $\mathbf{F} = [\mathbf{f}_1, \dots, \mathbf{f}_K] \in \mathbb{R}^{N \times K}$ typically suffer from high pairwise cross-correlation ($\rho > 0.6$). 
+#### Problem Statement
+Given candidate alpha signals $\mathbf{F} \in \mathbb{R}^{N \times K}$ with $\operatorname{rank}(\mathbf{F}) = K$, we seek an orthonormal factor matrix $\mathbf{\tilde{F}} \in \mathcal{V}_K(\mathbb{R}^N)$ that minimizes the total Frobenius distortion from the original signals:
 
-While standard Gram–Schmidt QR orthogonalization forces the first factor to remain unchanged and severely degrades later factors, **Löwdin orthogonalization** solves the variational optimization problem:
+$$\min_{\mathbf{\tilde{F}} \in \mathbb{R}^{N \times K}} \|\mathbf{F} - \mathbf{\tilde{F}}\|_F^2 \quad \text{subject to} \quad \mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}_K \tag{1}$$
 
-$$\min_{\mathbf{\tilde{F}} \in \mathbb{R}^{N \times K}} \|\mathbf{F} - \mathbf{\tilde{F}}\|_F^2 \quad \text{subject to} \quad \mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}_K$$
+#### Theorem 1 (Optimality & Polar Decomposition)
+The unique global minimizer to (1) is:
+$$\mathbf{\tilde{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \tag{2}$$
+where $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$ is the thin Singular Value Decomposition (SVD) of $\mathbf{F}$ ($\mathbf{U} \in \mathbb{R}^{N \times K}$, $\mathbf{\Sigma} = \operatorname{diag}(\sigma_1, \dots, \sigma_K) \succ 0$, $\mathbf{V} \in \mathbb{R}^{K \times K}$).
 
-The unique analytical solution is given by:
+*Proof Sketch:* Expanding $\|\mathbf{F} - \mathbf{\tilde{F}}\|_F^2 = \operatorname{Tr}(\mathbf{F}^T \mathbf{F}) - 2 \operatorname{Tr}(\mathbf{\tilde{F}}^T \mathbf{F}) + \operatorname{Tr}(\mathbf{I}_K)$, minimizing distance is equivalent to maximizing trace overlap $\max_{\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}} \operatorname{Tr}(\mathbf{\tilde{F}}^T \mathbf{F})$. Substituting SVD $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$, we have $\operatorname{Tr}(\mathbf{\tilde{F}}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \operatorname{Tr}(\mathbf{Z}^T \mathbf{\Sigma})$ where $\mathbf{Z} \triangleq \mathbf{U}^T \mathbf{\tilde{F}} \mathbf{V}$. Since $\|\mathbf{Z}\|_2 \le 1$, $|z_{kk}| \le 1$, the upper bound $\sum_k \sigma_k$ is attained if and only if $\mathbf{Z} = \mathbf{I}_K \iff \mathbf{\tilde{F}} = \mathbf{U} \mathbf{V}^T$. $\blacksquare$ (See [docs/mathematical_formulation.md](docs/mathematical_formulation.md) for full proof; cf. Löwdin (1950), Higham (1988)).
 
-$$\mathbf{\tilde{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2}$$
-
-Using the Thin Singular Value Decomposition (SVD):
-$$\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$$
-we have:
-$$(\mathbf{F}^T \mathbf{F})^{-1/2} = (\mathbf{V} \mathbf{\Sigma}^2 \mathbf{V}^T)^{-1/2} = \mathbf{V} \mathbf{\Sigma}^{-1} \mathbf{V}^T$$
-Thus:
-$$\mathbf{\tilde{F}} = (\mathbf{U} \mathbf{\Sigma} \mathbf{V}^T)(\mathbf{V} \mathbf{\Sigma}^{-1} \mathbf{V}^T) = \mathbf{U} \mathbf{V}^T$$
-
-$\mathbf{U} \mathbf{V}^T$ is precisely the unitary factor in the **Polar Decomposition** of $\mathbf{F}$, guaranteeing maximal preservation of original alpha dynamics with machine-precision numerical stability.
+#### Theorem 2 (Permutation Symmetry / Equivariance)
+Let $\mathbf{P} \in \mathbb{R}^{K \times K}$ be any permutation matrix ($\mathbf{P}^T \mathbf{P} = \mathbf{I}_K$). If factors are permuted as $\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}$, then:
+$$\mathbf{\tilde{F}}_{\pi} = \mathbf{\tilde{F}} \mathbf{P} \tag{3}$$
+*Proof Sketch:* $(\mathbf{F} \mathbf{P})((\mathbf{F} \mathbf{P})^T (\mathbf{F} \mathbf{P}))^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S} \mathbf{P})^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S}^{-1/2} \mathbf{P}) = \mathbf{F} \mathbf{S}^{-1/2} \mathbf{P} = \mathbf{\tilde{F}} \mathbf{P}$. $\blacksquare$
 
 ---
 
-### 2. Cross-Sectional Risk Neutralization
+### 2. Frisch–Waugh–Lovell Cross-Sectional Risk Neutralization
 
-Let $\mathbf{X} \in \mathbb{R}^{N \times M}$ denote the risk exposure matrix (e.g., sector dummy indicators and market beta). Regressing raw alpha signals on risk exposures:
+Let $\mathbf{X} \in \mathbb{R}^{N \times M}$ be the risk exposure matrix ($M < N$). Regressing factors on risk exposures:
+$$\mathbf{F} = \mathbf{X} \mathbf{B} + \mathbf{\mathcal{E}}, \quad \text{where } \mathbf{B} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{F}$$
 
-$$\mathbf{F} = \mathbf{X} \mathbf{B} + \mathbf{\mathcal{E}}$$
+The residual factor matrix $\mathbf{F}_{\text{neutral}} = \mathbf{\mathcal{E}}$ is the orthogonal projection onto the null space of $\mathbf{X}^T$:
+$$\mathbf{F}_{\text{neutral}} = \mathbf{M}_X \mathbf{F} = (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) \mathbf{F} \tag{4}$$
 
-The residual alpha matrix $\mathbf{F}_{\text{neutral}} = \mathbf{\mathcal{E}}$ represents the projection onto the null space of $\mathbf{X}$:
+#### Theorem 3 (Exact Risk Orthogonality)
+$$\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K} \tag{5}$$
+*Proof:* $\mathbf{X}^T \mathbf{M}_X = \mathbf{X}^T (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) = \mathbf{X}^T - (\mathbf{X}^T \mathbf{X})(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{0}$. $\blacksquare$ (Frisch & Waugh 1933; Lovell 1963).
 
-$$\mathbf{F}_{\text{neutral}} = \mathbf{M}_X \mathbf{F} = (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) \mathbf{F}$$
+#### Theorem 4 (Numerical Stability via QR Decomposition)
+Let $\mathbf{X} = \mathbf{Q}_X \mathbf{R}_X$ be the thin QR decomposition of $\mathbf{X}$ ($\mathbf{Q}_X^T \mathbf{Q}_X = \mathbf{I}_M$, $\mathbf{R}_X$ invertible). Then:
+$$\mathbf{M}_X \mathbf{F} = \mathbf{F} - \mathbf{Q}_X (\mathbf{Q}_X^T \mathbf{F}) \tag{6}$$
+*Proof:* $\mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{Q}_X^T \mathbf{Q}_X \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{Q}_X^T$. $\blacksquare$  
+This formulation eliminates explicit inversion of $\mathbf{X}^T \mathbf{X}$, reducing the condition number from $\kappa(\mathbf{X})^2$ to $\kappa(\mathbf{X})$.
 
-By computing the thin QR decomposition $\mathbf{X} = \mathbf{Q}_X \mathbf{R}_X$, we compute the projection stably without matrix inversion:
+---
 
-$$\mathbf{F}_{\text{neutral}} = \mathbf{F} - \mathbf{Q}_X (\mathbf{Q}_X^T \mathbf{F})$$
+### 3. Collinearity & Performance Metrics
 
-yielding exact risk orthogonality: $\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K}$.
+#### Variance Inflation Factor (VIF)
+For standardized factors $\mathbf{Z} \in \mathbb{R}^{N \times K}$ with correlation matrix $\mathbf{C} = \frac{1}{N-1} \mathbf{Z}^T \mathbf{Z}$:
+$$\operatorname{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \tag{7}$$
+where $R_k^2$ is the coefficient of determination from regressing factor $k$ on all other $K-1$ factors (Belsley et al., 2005).  
+For orthogonal factors, $\mathbf{C} = \mathbf{I}_K \implies \operatorname{VIF}_k = 1.0$ for all $k$.
+
+#### Effective Number of Factors (ENF)
+Using the spectral entropy of the eigenvalue distribution $p_k = \lambda_k / K$ of $\mathbf{C}$ (Meucci, 2009):
+$$\operatorname{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \tag{8}$$
+- $\operatorname{ENF} = 1.0$: Completely collinear factors (rank 1).
+- $\operatorname{ENF} = K$: Completely orthogonal factors (maximum spectral entropy).
+
+#### Theorem 5 ($R^2$ Additivity Under Orthogonality)
+If factors $\mathbf{Q} \in \mathcal{V}_K(\mathbb{R}^N)$ are orthonormal ($\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K$), then in the multiple regression $\mathbf{y} = \sum_{k=1}^K \beta_k \mathbf{q}_k + \boldsymbol{\varepsilon}$, the overall $R^2$ decomposes strictly additively:
+$$R^2_{\text{total}} = \sum_{k=1}^K R^2_k \tag{9}$$
+*Proof:* Since $\mathbf{q}_i^T \mathbf{q}_j = 0$ for $i \ne j$, cross-terms $\beta_i \beta_j \mathbf{q}_i^T \mathbf{q}_j$ vanish identically from the regression sum of squares $\|\sum_k \beta_k \mathbf{q}_k\|^2 = \sum_k \beta_k^2 \|\mathbf{q}_k\|^2$. $\blacksquare$
 
 ---
 
@@ -136,13 +158,26 @@ print("\nOrthonormal Factors Rank IC:\n", rank_ic)
 
 ---
 
-## Testing
+## Testing & Verification
 
 Run the comprehensive test suite with coverage:
 
 ```bash
 pytest
 ```
+
+---
+
+## Academic References & Bibliography
+
+1. **Löwdin, P.-O. (1950).** On the non-orthogonality problem connected with the use of atomic wave functions in the theory of molecules and crystals. *The Journal of Chemical Physics*, 18(3), 365–375.
+2. **Frisch, R., & Waugh, F. V. (1933).** Partial time regressions as compared with individual trends. *Econometrica*, 1(4), 387–401.
+3. **Lovell, M. C. (1963).** Seasonal adjustment of economic time series and multiple regression analysis. *Journal of the American Statistical Association*, 58(304), 993–1010.
+4. **Golub, G. H., & Van Loan, C. F. (2013).** *Matrix Computations* (4th ed.). Johns Hopkins University Press.
+5. **Higham, N. J. (1988).** Computing a nearest symmetric positive semidefinite matrix. *Linear Algebra and its Applications*, 103, 103–118.
+6. **Belsley, D. A., Kuh, E., & Welsch, R. E. (2005).** *Regression diagnostics: Identifying influential data and sources of collinearity*. John Wiley & Sons.
+7. **Meucci, A. (2009).** Managing diversification. *Risk*, 22(5), 74–79.
+8. **Kakushadze, Z. (2015).** Factor models and alpha streams. *The Journal of Investment Strategies*, 5(1), 1–45.
 
 ---
 

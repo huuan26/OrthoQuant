@@ -1,4 +1,10 @@
-"""Collinearity, Condition Number, and Distortion Metrics for Factor Sets."""
+"""Collinearity, Condition Number, and Distortion Metrics for Factor Sets.
+
+References:
+    - Belsley, D. A., Kuh, E., & Welsch, R. E. (2005). Regression diagnostics: Identifying
+      influential data and sources of collinearity. John Wiley & Sons.
+    - Meucci, A. (2009). "Managing diversification". Risk, 22(5), 74–79.
+"""
 
 from typing import Union
 import numpy as np
