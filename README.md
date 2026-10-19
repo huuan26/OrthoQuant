@@ -26,8 +26,8 @@ Throughout this framework, all mathematical objects are strictly defined as foll
 | $\mathbf{X} \in \mathbb{R}^{N \times M}$ | Matrix | Risk exposure matrix (e.g., sector dummy one-hots, Market Beta, Size) |
 | $\mathbf{I}_K \in \mathbb{R}^{K \times K}$ | Matrix | Identity matrix of size $K \times K$ |
 | $\mathcal{V}_K(\mathbb{R}^N)$ | Stiefel Manifold | Set of $N \times K$ orthonormal matrices: $\{ \mathbf{Q} \in \mathbb{R}^{N \times K} : \mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K \}$ |
-| $\|\cdot\|_F$ | Matrix Norm | Frobenius norm: $\|\mathbf{A}\|_F = \sqrt{\operatorname{Tr}(\mathbf{A}^T \mathbf{A})} = \sqrt{\sum_{i,j} a_{ij}^2}$ |
-| $\operatorname{Tr}(\cdot)$ | Operator | Matrix trace: $\operatorname{Tr}(\mathbf{A}) = \sum_i a_{ii}$ |
+| $\|\cdot\|_F$ | Matrix Norm | Frobenius norm: $\|\mathbf{A}\|_F = \sqrt{\mathrm{Tr}(\mathbf{A}^T \mathbf{A})} = \sqrt{\sum_{i,j} a_{ij}^2}$ |
+| $\mathrm{Tr}(\cdot)$ | Operator | Matrix trace: $\mathrm{Tr}(\mathbf{A}) = \sum_i a_{ii}$ |
 | $\kappa_2(\cdot)$ | Metric | Matrix condition number: $\kappa_2(\mathbf{A}) = \sigma_{\max}(\mathbf{A}) / \sigma_{\min}(\mathbf{A})$ |
 
 ---
@@ -37,16 +37,16 @@ Throughout this framework, all mathematical objects are strictly defined as foll
 ### 1. Löwdin Symmetric Orthogonalization
 
 #### Problem Statement
-Given candidate alpha signals $\mathbf{F} \in \mathbb{R}^{N \times K}$ with $\operatorname{rank}(\mathbf{F}) = K$, we seek an orthonormal factor matrix $\mathbf{\tilde{F}} \in \mathcal{V}_K(\mathbb{R}^N)$ that minimizes the total Frobenius distortion from the original signals:
+Given candidate alpha signals $\mathbf{F} \in \mathbb{R}^{N \times K}$ with $\mathrm{rank}(\mathbf{F}) = K$, we seek an orthonormal factor matrix $\mathbf{\tilde{F}} \in \mathcal{V}_K(\mathbb{R}^N)$ that minimizes the total Frobenius distortion from the original signals:
 
 $$\min_{\mathbf{\tilde{F}} \in \mathbb{R}^{N \times K}} \|\mathbf{F} - \mathbf{\tilde{F}}\|_F^2 \quad \text{subject to} \quad \mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}_K \tag{1}$$
 
 #### Theorem 1 (Optimality & Polar Decomposition)
 The unique global minimizer to (1) is:
 $$\mathbf{\tilde{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \tag{2}$$
-where $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$ is the thin Singular Value Decomposition (SVD) of $\mathbf{F}$ ($\mathbf{U} \in \mathbb{R}^{N \times K}$, $\mathbf{\Sigma} = \operatorname{diag}(\sigma_1, \dots, \sigma_K) \succ 0$, $\mathbf{V} \in \mathbb{R}^{K \times K}$).
+where $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$ is the thin Singular Value Decomposition (SVD) of $\mathbf{F}$ ($\mathbf{U} \in \mathbb{R}^{N \times K}$, $\mathbf{\Sigma} = \mathrm{diag}(\sigma_1, \dots, \sigma_K) \succ 0$, $\mathbf{V} \in \mathbb{R}^{K \times K}$).
 
-*Proof Sketch:* Expanding $\|\mathbf{F} - \mathbf{\tilde{F}}\|_F^2 = \operatorname{Tr}(\mathbf{F}^T \mathbf{F}) - 2 \operatorname{Tr}(\mathbf{\tilde{F}}^T \mathbf{F}) + \operatorname{Tr}(\mathbf{I}_K)$, minimizing distance is equivalent to maximizing trace overlap $\max_{\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}} \operatorname{Tr}(\mathbf{\tilde{F}}^T \mathbf{F})$. Substituting SVD $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$, we have $\operatorname{Tr}(\mathbf{\tilde{F}}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \operatorname{Tr}(\mathbf{Z}^T \mathbf{\Sigma})$ where $\mathbf{Z} \triangleq \mathbf{U}^T \mathbf{\tilde{F}} \mathbf{V}$. Since $\|\mathbf{Z}\|_2 \le 1$, $|z_{kk}| \le 1$, the upper bound $\sum_k \sigma_k$ is attained if and only if $\mathbf{Z} = \mathbf{I}_K \iff \mathbf{\tilde{F}} = \mathbf{U} \mathbf{V}^T$. $\blacksquare$ (See [docs/mathematical_formulation.md](docs/mathematical_formulation.md) for full proof; cf. Löwdin (1950), Higham (1988)).
+*Proof Sketch:* Expanding $\|\mathbf{F} - \mathbf{\tilde{F}}\|_F^2 = \mathrm{Tr}(\mathbf{F}^T \mathbf{F}) - 2 \mathrm{Tr}(\mathbf{\tilde{F}}^T \mathbf{F}) + \mathrm{Tr}(\mathbf{I}_K)$, minimizing distance is equivalent to maximizing trace overlap $\max_{\mathbf{\tilde{F}}^T \mathbf{\tilde{F}} = \mathbf{I}} \mathrm{Tr}(\mathbf{\tilde{F}}^T \mathbf{F})$. Substituting SVD $\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$, we have $\mathrm{Tr}(\mathbf{\tilde{F}}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \mathrm{Tr}(\mathbf{Z}^T \mathbf{\Sigma})$ where $\mathbf{Z} \triangleq \mathbf{U}^T \mathbf{\tilde{F}} \mathbf{V}$. Since $\|\mathbf{Z}\|_2 \le 1$, $|z_{kk}| \le 1$, the upper bound $\sum_k \sigma_k$ is attained if and only if $\mathbf{Z} = \mathbf{I}_K \iff \mathbf{\tilde{F}} = \mathbf{U} \mathbf{V}^T$. $\blacksquare$ (See [docs/mathematical_formulation.md](docs/mathematical_formulation.md) for full proof; cf. Löwdin (1950), Higham (1988)).
 
 #### Theorem 2 (Permutation Symmetry / Equivariance)
 Let $\mathbf{P} \in \mathbb{R}^{K \times K}$ be any permutation matrix ($\mathbf{P}^T \mathbf{P} = \mathbf{I}_K$). If factors are permuted as $\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}$, then:
@@ -79,15 +79,15 @@ This formulation eliminates explicit inversion of $\mathbf{X}^T \mathbf{X}$, red
 
 #### Variance Inflation Factor (VIF)
 For standardized factors $\mathbf{Z} \in \mathbb{R}^{N \times K}$ with correlation matrix $\mathbf{C} = \frac{1}{N-1} \mathbf{Z}^T \mathbf{Z}$:
-$$\operatorname{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \tag{7}$$
+$$\mathrm{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \tag{7}$$
 where $R_k^2$ is the coefficient of determination from regressing factor $k$ on all other $K-1$ factors (Belsley et al., 2005).  
-For orthogonal factors, $\mathbf{C} = \mathbf{I}_K \implies \operatorname{VIF}_k = 1.0$ for all $k$.
+For orthogonal factors, $\mathbf{C} = \mathbf{I}_K \implies \mathrm{VIF}_k = 1.0$ for all $k$.
 
 #### Effective Number of Factors (ENF)
 Using the spectral entropy of the eigenvalue distribution $p_k = \lambda_k / K$ of $\mathbf{C}$ (Meucci, 2009):
-$$\operatorname{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \tag{8}$$
-- $\operatorname{ENF} = 1.0$: Completely collinear factors (rank 1).
-- $\operatorname{ENF} = K$: Completely orthogonal factors (maximum spectral entropy).
+$$\mathrm{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \tag{8}$$
+- $\mathrm{ENF} = 1.0$: Completely collinear factors (rank 1).
+- $\mathrm{ENF} = K$: Completely orthogonal factors (maximum spectral entropy).
 
 #### Theorem 5 ($R^2$ Additivity Under Orthogonality)
 If factors $\mathbf{Q} \in \mathcal{V}_K(\mathbb{R}^N)$ are orthonormal ($\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K$), then in the multiple regression $\mathbf{y} = \sum_{k=1}^K \beta_k \mathbf{q}_k + \boldsymbol{\varepsilon}$, the overall $R^2$ decomposes strictly additively:
