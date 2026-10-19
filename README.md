@@ -40,14 +40,16 @@ Throughout this framework, all mathematical objects are strictly defined as foll
 Given candidate alpha signals $`\mathbf{F} \in \mathbb{R}^{N \times K}`$ with $`\mathrm{rank}(\mathbf{F}) = K`$, we seek an orthonormal factor matrix $`\widetilde{\mathbf{F}} \in \mathcal{V}_K(\mathbb{R}^N)`$ that minimizes the total Frobenius distortion from the original signals:
 
 $$
-\min_{\widetilde{\mathbf{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 \quad \text{subject to} \quad \widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K \tag{1}
+\min_{\widetilde{\mathbf{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 \quad \text{subject to} \quad \widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K \qquad \text{(1)}
 $$
 
 #### Theorem 1 (Optimality & Polar Decomposition)
 
 The unique global minimizer to (1) is:
 
-$$\widetilde{\mathbf{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \tag{2}$$
+$$
+\widetilde{\mathbf{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \qquad \text{(2)}
+$$
 
 where $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$ is the thin Singular Value Decomposition (SVD) of $`\mathbf{F}`$ ($`\mathbf{U} \in \mathbb{R}^{N \times K}`$, $`\mathbf{\Sigma} = \mathrm{diag}(\sigma_1, \dots, \sigma_K) \succ 0`$, $`\mathbf{V} \in \mathbb{R}^{K \times K}`$).
 
@@ -57,7 +59,9 @@ where $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$ is the thin Singu
 
 Let $`\mathbf{P} \in \mathbb{R}^{K \times K}`$ be any permutation matrix ($`\mathbf{P}^T \mathbf{P} = \mathbf{I}_K`$). If factors are permuted as $`\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}`$, then:
 
-$$\widetilde{\mathbf{F}}_{\pi} = \widetilde{\mathbf{F}} \mathbf{P} \tag{3}$$
+$$
+\widetilde{\mathbf{F}}_{\pi} = \widetilde{\mathbf{F}} \mathbf{P} \qquad \text{(3)}
+$$
 
 *Proof Sketch:* $`(\mathbf{F} \mathbf{P})((\mathbf{F} \mathbf{P})^T (\mathbf{F} \mathbf{P}))^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S} \mathbf{P})^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{S}^{-1/2} \mathbf{P}) = \mathbf{F} \mathbf{S}^{-1/2} \mathbf{P} = \widetilde{\mathbf{F}} \mathbf{P}`$. $`\blacksquare`$
 
@@ -67,15 +71,21 @@ $$\widetilde{\mathbf{F}}_{\pi} = \widetilde{\mathbf{F}} \mathbf{P} \tag{3}$$
 
 Let $`\mathbf{X} \in \mathbb{R}^{N \times M}`$ be the risk exposure matrix ($`M < N`$). Regressing factors on risk exposures:
 
-$$\mathbf{F} = \mathbf{X} \mathbf{B} + \mathbf{\mathcal{E}}, \quad \text{where } \mathbf{B} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{F}$$
+$$
+\mathbf{F} = \mathbf{X} \mathbf{B} + \mathbf{\mathcal{E}}, \quad \text{where } \mathbf{B} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{F}
+$$
 
 The residual factor matrix $`\mathbf{F}_{\text{neutral}} = \mathbf{\mathcal{E}}`$ is the orthogonal projection onto the null space of $`\mathbf{X}^T`$:
 
-$$\mathbf{F}_{\text{neutral}} = \mathbf{M}_X \mathbf{F} = (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) \mathbf{F} \tag{4}$$
+$$
+\mathbf{F}_{\text{neutral}} = \mathbf{M}_X \mathbf{F} = (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) \mathbf{F} \qquad \text{(4)}
+$$
 
 #### Theorem 3 (Exact Risk Orthogonality)
 
-$$\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K} \tag{5}$$
+$$
+\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K} \qquad \text{(5)}
+$$
 
 *Proof:* $`\mathbf{X}^T \mathbf{M}_X = \mathbf{X}^T (\mathbf{I}_N - \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T) = \mathbf{X}^T - (\mathbf{X}^T \mathbf{X})(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{0}`$. $`\blacksquare`$ (Frisch & Waugh 1933; Lovell 1963).
 
@@ -83,7 +93,9 @@ $$\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K} \tag{5}$$
 
 Let $`\mathbf{X} = \mathbf{Q}_X \mathbf{R}_X`$ be the thin QR decomposition of $`\mathbf{X}`$ ($`\mathbf{Q}_X^T \mathbf{Q}_X = \mathbf{I}_M`$, $`\mathbf{R}_X`$ invertible). Then:
 
-$$\mathbf{M}_X \mathbf{F} = \mathbf{F} - \mathbf{Q}_X (\mathbf{Q}_X^T \mathbf{F}) \tag{6}$$
+$$
+\mathbf{M}_X \mathbf{F} = \mathbf{F} - \mathbf{Q}_X (\mathbf{Q}_X^T \mathbf{F}) \qquad \text{(6)}
+$$
 
 *Proof:* $`\mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{Q}_X^T \mathbf{Q}_X \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{R}_X (\mathbf{R}_X^T \mathbf{R}_X)^{-1} \mathbf{R}_X^T \mathbf{Q}_X^T = \mathbf{Q}_X \mathbf{Q}_X^T`$. $`\blacksquare`$  
 This formulation eliminates explicit inversion of $`\mathbf{X}^T \mathbf{X}`$, reducing the condition number from $`\kappa(\mathbf{X})^2`$ to $`\kappa(\mathbf{X})`$.
@@ -96,7 +108,9 @@ This formulation eliminates explicit inversion of $`\mathbf{X}^T \mathbf{X}`$, r
 
 For standardized factors $`\mathbf{Z} \in \mathbb{R}^{N \times K}`$ with correlation matrix $`\mathbf{C} = \frac{1}{N-1} \mathbf{Z}^T \mathbf{Z}`$:
 
-$$\mathrm{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \tag{7}$$
+$$
+\mathrm{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \qquad \text{(7)}
+$$
 
 where $`R_k^2`$ is the coefficient of determination from regressing factor $`k`$ on all other $`K-1`$ factors (Belsley et al., 2005).  
 For orthogonal factors, $`\mathbf{C} = \mathbf{I}_K \implies \mathrm{VIF}_k = 1.0`$ for all $`k`$.
@@ -105,7 +119,9 @@ For orthogonal factors, $`\mathbf{C} = \mathbf{I}_K \implies \mathrm{VIF}_k = 1.
 
 Using the spectral entropy of the eigenvalue distribution $`p_k = \lambda_k / K`$ of $`\mathbf{C}`$ (Meucci, 2009):
 
-$$\mathrm{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \tag{8}$$
+$$
+\mathrm{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \qquad \text{(8)}
+$$
 
 - $`\mathrm{ENF} = 1.0`$: Completely collinear factors (rank 1).
 - $`\mathrm{ENF} = K`$: Completely orthogonal factors (maximum spectral entropy).
@@ -114,7 +130,9 @@ $$\mathrm{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \tag{8}$$
 
 If factors $`\mathbf{Q} \in \mathcal{V}_K(\mathbb{R}^N)`$ are orthonormal ($`\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K`$), then in the multiple regression $`\mathbf{y} = \sum_{k=1}^K \beta_k \mathbf{q}_k + \boldsymbol{\varepsilon}`$, the overall $`R^2`$ decomposes strictly additively:
 
-$$R^2_{\text{total}} = \sum_{k=1}^K R^2_k \tag{9}$$
+$$
+R^2_{\text{total}} = \sum_{k=1}^K R^2_k \qquad \text{(9)}
+$$
 
 *Proof:* Since $`\mathbf{q}_i^T \mathbf{q}_j = 0`$ for $`i \ne j`$, cross-terms $`\beta_i \beta_j \mathbf{q}_i^T \mathbf{q}_j`$ vanish identically from the regression sum of squares $`\lVert \sum_k \beta_k \mathbf{q}_k \rVert^2 = \sum_k \beta_k^2 \lVert \mathbf{q}_k \rVert^2`$. $`\blacksquare`$
 

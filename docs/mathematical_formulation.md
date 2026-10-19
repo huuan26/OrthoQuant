@@ -32,13 +32,17 @@ Throughout this document and codebase, we adhere to the following mathematical c
 
 Given a factor matrix $`\mathbf{F} \in \mathbb{R}^{N \times K}`$ with $`\mathrm{rank}(\mathbf{F}) = K`$, we seek an orthonormal factor matrix $`\widetilde{\mathbf{F}} \in \mathcal{V}_K(\mathbb{R}^N)`$ that is as close as possible to the original factor matrix $`\mathbf{F}`$ in the Frobenius metric:
 
-$$\min_{\widetilde{\mathbf{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 \quad \text{subject to} \quad \widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K \tag{1}$$
+$$
+\min_{\widetilde{\mathbf{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 \quad \text{subject to} \quad \widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K \qquad \text{(1)}
+$$
 
 ### 2.2 Theorem: Closed-Form Solution via Polar Decomposition
 
 **Theorem 1.** *The unique global minimizer to (1) is given by:*
 
-$$\widetilde{\mathbf{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \tag{2}$$
+$$
+\widetilde{\mathbf{F}} = \mathbf{F} (\mathbf{F}^T \mathbf{F})^{-1/2} = \mathbf{U} \mathbf{V}^T \qquad \text{(2)}
+$$
 
 *where $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$ is the thin Singular Value Decomposition (SVD) of $`\mathbf{F}`$ ($`\mathbf{U} \in \mathbb{R}^{N \times K}`$, $`\mathbf{\Sigma} = \mathrm{diag}(\sigma_1, \dots, \sigma_K) \succ 0`$, $`\mathbf{V} \in \mathbb{R}^{K \times K}`$).*
 
@@ -50,7 +54,9 @@ $$\lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 = \mathrm{Tr}\left((\mat
 
 Because $`\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K`$, the last term is $`\mathrm{Tr}(\mathbf{I}_K) = K`$ (constant). Similarly, $`\mathrm{Tr}(\mathbf{F}^T \mathbf{F}) = \sum_{k=1}^K \sigma_k^2`$ is constant with respect to $`\widetilde{\mathbf{F}}`$. Therefore, minimizing the objective is strictly equivalent to maximizing the trace overlap:
 
-$$\max_{\widetilde{\mathbf{F}} \in \mathcal{V}_K(\mathbb{R}^N)} \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F}) \tag{3}$$
+$$
+\max_{\widetilde{\mathbf{F}} \in \mathcal{V}_K(\mathbb{R}^N)} \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F}) \qquad \text{(3)}
+$$
 
 Substitute the thin SVD $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$ into (3):
 
@@ -82,7 +88,9 @@ This completes the proof. $`\blacksquare`$
 
 **Theorem 2.** *Löwdin orthogonalization is permutation equivariant. Let $`\mathbf{P} \in \mathbb{R}^{K \times K}`$ be any $`K \times K`$ permutation matrix ($`\mathbf{P}^T \mathbf{P} = \mathbf{P} \mathbf{P}^T = \mathbf{I}_K`$). If factors are permuted as $`\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}`$, then the orthogonalized factors satisfy:*
 
-$$\widetilde{\mathbf{F}}_{\pi} = \widetilde{\mathbf{F}} \mathbf{P} \tag{4}$$
+$$
+\widetilde{\mathbf{F}}_{\pi} = \widetilde{\mathbf{F}} \mathbf{P} \qquad \text{(4)}
+$$
 
 #### Proof:
 
@@ -121,7 +129,9 @@ $$\mathbf{M}_X \triangleq \mathbf{I}_N - \mathbf{P}_X = \mathbf{I}_N - \mathbf{X
 
 **Theorem 3.** *Both $`\mathbf{P}_X`$ and $`\mathbf{M}_X`$ are symmetric and idempotent projection operators ($`\mathbf{M}_X^T = \mathbf{M}_X`$, $`\mathbf{M}_X^2 = \mathbf{M}_X`$). The residual factor matrix $`\mathbf{F}_{\text{neutral}} = \mathbf{M}_X \mathbf{F}`$ satisfies exact risk orthogonality:*
 
-$$\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K} \tag{5}$$
+$$
+\mathbf{X}^T \mathbf{F}_{\text{neutral}} = \mathbf{0}_{M \times K} \qquad \text{(5)}
+$$
 
 #### Proof:
 
@@ -139,7 +149,9 @@ $`\blacksquare`$
 
 **Theorem 4.** *Let $`\mathbf{X} = \mathbf{Q}_X \mathbf{R}_X`$ be the thin QR decomposition of $`\mathbf{X}`$, where $`\mathbf{Q}_X \in \mathbb{R}^{N \times M}`$ satisfies $`\mathbf{Q}_X^T \mathbf{Q}_X = \mathbf{I}_M`$ and $`\mathbf{R}_X \in \mathbb{R}^{M \times M}`$ is non-singular upper triangular. Then:*
 
-$$\mathbf{P}_X = \mathbf{Q}_X \mathbf{Q}_X^T \quad \text{and} \quad \mathbf{M}_X \mathbf{F} = \mathbf{F} - \mathbf{Q}_X (\mathbf{Q}_X^T \mathbf{F}) \tag{6}$$
+$$
+\mathbf{P}_X = \mathbf{Q}_X \mathbf{Q}_X^T \quad \text{and} \quad \mathbf{M}_X \mathbf{F} = \mathbf{F} - \mathbf{Q}_X (\mathbf{Q}_X^T \mathbf{F}) \qquad \text{(6)}
+$$
 
 #### Proof:
 
@@ -179,7 +191,9 @@ $$\mathbf{C} = \frac{1}{N - 1} \mathbf{Z}^T \mathbf{Z} \in \mathbb{R}^{K \times 
 
 The Variance Inflation Factor for factor $`k`$ is given by:
 
-$$\mathrm{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \tag{7}$$
+$$
+\mathrm{VIF}_k = (\mathbf{C}^{-1})_{kk} = \frac{1}{1 - R_k^2} \qquad \text{(7)}
+$$
 
 where $`R_k^2`$ is the coefficient of determination obtained from regressing $`\mathbf{z}_k`$ on all remaining $`K - 1`$ factors.
 - **For collinear factors:** $`R_k^2 \to 1 \implies \mathrm{VIF}_k \to \infty`$.
@@ -187,7 +201,9 @@ where $`R_k^2`$ is the coefficient of determination obtained from regressing $`\
 
 ### 4.2 Matrix Condition Number (κ)
 
-$$\kappa_2(\mathbf{F}) = \frac{\sigma_{\max}(\mathbf{F})}{\sigma_{\min}(\mathbf{F})} \tag{8}$$
+$$
+\kappa_2(\mathbf{F}) = \frac{\sigma_{\max}(\mathbf{F})}{\sigma_{\min}(\mathbf{F})} \qquad \text{(8)}
+$$
 
 For any orthogonal matrix $`\mathbf{Q} \in \mathcal{V}_K(\mathbb{R}^N)`$, all singular values $`\sigma_k = 1`$, thus $`\kappa_2(\mathbf{Q}) = 1.0`$, which represents the theoretical minimum possible condition number.
 
@@ -205,7 +221,9 @@ $$H(\mathbf{C}) \triangleq -\sum_{k=1}^K p_k \ln(p_k)$$
 
 The Effective Number of Factors is defined as the exponential of entropy:
 
-$$\mathrm{ENF} \triangleq \exp\left(H(\mathbf{C})\right) \tag{9}$$
+$$
+\mathrm{ENF} \triangleq \exp\left(H(\mathbf{C})\right) \qquad \text{(9)}
+$$
 
 - **Extreme Case 1 (Perfect Collinearity):** $`\lambda_1 = K, \lambda_2 = \dots = \lambda_K = 0 \implies p_1 = 1 \implies H = 0 \implies \mathrm{ENF} = 1.0`$.
 - **Extreme Case 2 (Complete Orthogonality):** $`\lambda_k = 1 \implies p_k = 1/K \implies H = \ln K \implies \mathrm{ENF} = K`$.
@@ -214,7 +232,9 @@ $$\mathrm{ENF} \triangleq \exp\left(H(\mathbf{C})\right) \tag{9}$$
 
 **Theorem 5.** *Let $`\mathbf{Q} = [\mathbf{q}_1, \dots, \mathbf{q}_K] \in \mathbb{R}^{N \times K}`$ be an orthonormal factor matrix ($`\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K`$). In the linear model $`\mathbf{y} = \mathbf{Q} \boldsymbol{\beta} + \boldsymbol{\varepsilon}`$, the total regression coefficient of determination $`R^2_{\text{total}}`$ decomposes additively without interaction terms:*
 
-$$R^2_{\text{total}} = \sum_{k=1}^K R^2_k \tag{10}$$
+$$
+R^2_{\text{total}} = \sum_{k=1}^K R^2_k \qquad \text{(10)}
+$$
 
 #### Proof:
 
