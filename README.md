@@ -39,7 +39,7 @@ Throughout this framework, all mathematical objects are strictly defined as foll
 #### Problem Statement
 Given candidate alpha signals $`\mathbf{F} \in \mathbb{R}^{N \times K}`$ with $`\mathrm{rank}(\mathbf{F}) = K`$, we seek an orthonormal factor matrix $`\widetilde{\mathbf{F}} \in \mathcal{V}_K(\mathbb{R}^N)`$ that minimizes the total Frobenius distortion from the original signals:
 
-$$\min_{\widetilde{\mathbf{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 \quad \text{subject to} \quad \widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K \tag{1}$$
+\[\min_{\widetilde{\mathbf{F}} \in \mathbb{R}^{N \times K}} \lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 \quad \text{subject to} \quad \widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}_K \tag{1}\]
 
 #### Theorem 1 (Optimality & Polar Decomposition)
 
