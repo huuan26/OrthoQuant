@@ -1,4 +1,4 @@
-"""Unit tests for Löwdin symmetric orthogonalization."""
+"""Unit tests for Lowdin symmetric orthogonalization."""
 
 import numpy as np
 import pandas as pd
@@ -53,7 +53,7 @@ def test_lowdin_orthonormality(sample_factor_matrix):
 
 
 def test_lowdin_minimal_frobenius_distortion(sample_factor_matrix):
-    """Verify that Löwdin achieves smaller Frobenius distortion than Gram-Schmidt."""
+    """Verify that Lowdin achieves smaller Frobenius distortion than Gram-Schmidt."""
     X = sample_factor_matrix
     Q_lowdin = lowdin_orthogonalize(X, method="svd")
     Q_gs = gram_schmidt_orthogonalize(X)
@@ -61,12 +61,12 @@ def test_lowdin_minimal_frobenius_distortion(sample_factor_matrix):
     dist_lowdin = frobenius_distortion(X, Q_lowdin, relative=True)
     dist_gs = frobenius_distortion(X, Q_gs, relative=True)
 
-    # Löwdin distortion must be strictly <= Gram-Schmidt distortion
+    # Lowdin distortion must be strictly <= Gram-Schmidt distortion
     assert dist_lowdin <= dist_gs + 1e-10
 
 
 def test_lowdin_permutation_symmetry():
-    """Verify that Löwdin is permutation symmetric.
+    """Verify that Lowdin is permutation symmetric.
 
     If input columns are permuted: F_perm = F P,
     then the orthogonalized columns are permuted by the exact same permutation:

@@ -90,7 +90,7 @@ def frobenius_distortion(
 
     Distortion = ||F_orig - F_ortho||_F / ||F_orig||_F
 
-    Löwdin symmetric orthogonalization is mathematically proven to minimize this metric
+    Lowdin symmetric orthogonalization is mathematically proven to minimize this metric
     among all possible orthonormal transformations.
     """
     F1 = (

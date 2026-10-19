@@ -1,4 +1,4 @@
-"""Löwdin Symmetric Factor Orthogonalization.
+"""Lowdin Symmetric Factor Orthogonalization.
 
 Notation:
     - N: Number of assets (rows).
@@ -9,7 +9,7 @@ Notation:
 
 Formulation:
     Given a factor matrix F in R^{N x K} representing K alpha signals on N assets,
-    Löwdin symmetric orthogonalization finds the orthogonal matrix F_tilde in R^{N x K}
+    Lowdin symmetric orthogonalization finds the orthogonal matrix F_tilde in R^{N x K}
     that is closest to the original factors F in the Frobenius norm metric:
 
         min_{F_tilde} ||F - F_tilde||_F^2
@@ -23,11 +23,11 @@ Formulation:
         F_tilde = U V^T
 
     which represents the unitary polar factor in the polar decomposition of F.
-    Unlike Gram-Schmidt, Löwdin is permutation-symmetric and treats all factors
+    Unlike Gram-Schmidt, Lowdin is permutation-symmetric and treats all factors
     symmetrically without preferential bias toward any specific input order.
 
 References:
-    - Löwdin, P.-O. (1950). "On the non-orthogonality problem connected with the use
+    - Lowdin, P.-O. (1950). "On the non-orthogonality problem connected with the use
       of atomic wave functions in the theory of molecules and crystals".
       The Journal of Chemical Physics, 18(3), 365–375.
     - Higham, N. J. (1988). "Computing a nearest symmetric positive semidefinite matrix".
@@ -46,7 +46,7 @@ def lowdin_orthogonalize(
     rcond: float = 1e-12,
     standardize: bool = False,
 ) -> Union[np.ndarray, pd.DataFrame]:
-    """Perform Löwdin symmetric orthogonalization on a factor matrix.
+    """Perform Lowdin symmetric orthogonalization on a factor matrix.
 
     Parameters
     ----------
@@ -143,7 +143,7 @@ def lowdin_correlation_transform(
     factors: Union[np.ndarray, pd.DataFrame],
     rcond: float = 1e-12,
 ) -> Union[np.ndarray, pd.DataFrame]:
-    """Compute Löwdin symmetric orthogonalization in the correlation space.
+    """Compute Lowdin symmetric orthogonalization in the correlation space.
 
     First centers and scales factors to zero-mean and unit-variance, then transforms
     them by C^{-1/2} where C is the cross-sectional correlation matrix.

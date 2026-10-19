@@ -34,7 +34,7 @@ Throughout this framework, all mathematical objects are strictly defined as foll
 
 ## Mathematical Formulation & Theorems
 
-### 1. Löwdin Symmetric Orthogonalization
+### 1. Lowdin Symmetric Orthogonalization
 
 #### Problem Statement
 Given candidate alpha signals $`\mathbf{F} \in \mathbb{R}^{N \times K}`$ with $`\mathrm{rank}(\mathbf{F}) = K`$, we seek an orthonormal factor matrix $`\widetilde{\mathbf{F}} \in \mathcal{V}_K(\mathbb{R}^N)`$ that minimizes the total Frobenius distortion from the original signals:
@@ -53,7 +53,7 @@ $$
 
 where $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$ is the thin Singular Value Decomposition (SVD) of $`\mathbf{F}`$ ($`\mathbf{U} \in \mathbb{R}^{N \times K}`$, $`\mathbf{\Sigma} = \mathrm{diag}(\sigma_1, \dots, \sigma_K) \succ 0`$, $`\mathbf{V} \in \mathbb{R}^{K \times K}`$).
 
-*Proof Sketch:* Expanding $`\lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 = \mathrm{Tr}(\mathbf{F}^T \mathbf{F}) - 2 \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F}) + \mathrm{Tr}(\mathbf{I}_K)`$, minimizing distance is equivalent to maximizing trace overlap $`\max_{\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}} \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F})`$. Substituting SVD $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$, we have $`\mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \mathrm{Tr}(\mathbf{Z}^T \mathbf{\Sigma})`$ where $`\mathbf{Z} \triangleq \mathbf{U}^T \widetilde{\mathbf{F}} \mathbf{V}`$. Since $`\lVert \mathbf{Z} \rVert_2 \le 1`$, $`\lvert z_{kk} \rvert \le 1`$, the upper bound $`\sum_k \sigma_k`$ is attained if and only if $`\mathbf{Z} = \mathbf{I}_K \iff \widetilde{\mathbf{F}} = \mathbf{U} \mathbf{V}^T`$. $`\blacksquare`$ (See [docs/mathematical_formulation.md](docs/mathematical_formulation.md) for full proof; cf. Löwdin (1950), Higham (1988)).
+*Proof Sketch:* Expanding $`\lVert \mathbf{F} - \widetilde{\mathbf{F}} \rVert_F^2 = \mathrm{Tr}(\mathbf{F}^T \mathbf{F}) - 2 \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F}) + \mathrm{Tr}(\mathbf{I}_K)`$, minimizing distance is equivalent to maximizing trace overlap $`\max_{\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}} \mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{F})`$. Substituting SVD $`\mathbf{F} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T`$, we have $`\mathrm{Tr}(\widetilde{\mathbf{F}}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \mathrm{Tr}(\mathbf{Z}^T \mathbf{\Sigma})`$ where $`\mathbf{Z} \triangleq \mathbf{U}^T \widetilde{\mathbf{F}} \mathbf{V}`$. Since $`\lVert \mathbf{Z} \rVert_2 \le 1`$, $`\lvert z_{kk} \rvert \le 1`$, the upper bound $`\sum_k \sigma_k`$ is attained if and only if $`\mathbf{Z} = \mathbf{I}_K \iff \widetilde{\mathbf{F}} = \mathbf{U} \mathbf{V}^T`$. $`\blacksquare`$ (See [docs/mathematical_formulation.md](docs/mathematical_formulation.md) for full proof; cf. Lowdin (1950), Higham (1988)).
 
 #### Theorem 2 (Permutation Symmetry / Equivariance)
 
@@ -138,9 +138,9 @@ $$
 
 ---
 
-## Comparison: Löwdin vs Gram-Schmidt vs PCA
+## Comparison: Lowdin vs Gram-Schmidt vs PCA
 
-| Dimension | Löwdin Symmetric | Gram-Schmidt | Principal Component Analysis (PCA) |
+| Dimension | Lowdin Symmetric | Gram-Schmidt | Principal Component Analysis (PCA) |
 | :--- | :--- | :--- | :--- |
 | **Orthogonality** | $`\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}`$ | $`\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}`$ | $`\widetilde{\mathbf{F}}^T \widetilde{\mathbf{F}} = \mathbf{I}`$ |
 | **Order Symmetry** | **Yes** (Permutation Symmetric) | **No** (Order-dependent) | **No** (Sorted by eigenvalue variance) |
@@ -186,10 +186,10 @@ print("Variance Inflation Factors (VIF):\n", variance_inflation_factors(raw_fact
 # 2. Cross-Sectional Risk Neutralization (strip sector & beta exposure)
 neutral_factors = neutralize_factors(raw_factors, risk_exposures, standardize=True)
 
-# 3. Löwdin Symmetric Orthogonalization
+# 3. Lowdin Symmetric Orthogonalization
 ortho_factors = lowdin_orthogonalize(neutral_factors, standardize=True)
 
-print("\n--- After Löwdin Orthogonalization ---")
+print("\n--- After Lowdin Orthogonalization ---")
 print("Condition Number:", condition_number(ortho_factors))  # Exactly 1.0
 print("Variance Inflation Factors (VIF):\n", variance_inflation_factors(ortho_factors))  # Exactly 1.0
 
@@ -212,7 +212,7 @@ pytest
 
 ## Academic References & Bibliography
 
-1. **Löwdin, P.-O. (1950).** On the non-orthogonality problem connected with the use of atomic wave functions in the theory of molecules and crystals. *The Journal of Chemical Physics*, 18(3), 365–375.
+1. **Lowdin, P.-O. (1950).** On the non-orthogonality problem connected with the use of atomic wave functions in the theory of molecules and crystals. *The Journal of Chemical Physics*, 18(3), 365–375.
 2. **Frisch, R., & Waugh, F. V. (1933).** Partial time regressions as compared with individual trends. *Econometrica*, 1(4), 387–401.
 3. **Lovell, M. C. (1963).** Seasonal adjustment of economic time series and multiple regression analysis. *Journal of the American Statistical Association*, 58(304), 993–1010.
 4. **Golub, G. H., & Van Loan, C. F. (2013).** *Matrix Computations* (4th ed.). Johns Hopkins University Press.

@@ -35,7 +35,7 @@ def test_vif_orthogonal_vs_collinear(collinear_data):
     raw_vifs = variance_inflation_factors(df)
     assert np.all(raw_vifs > 5.0)
 
-    # After Löwdin orthogonalization, correlation matrix is identity -> VIF = 1.0
+    # After Lowdin orthogonalization, correlation matrix is identity -> VIF = 1.0
     F_ortho = lowdin_orthogonalize(df, standardize=True)
     ortho_vifs = variance_inflation_factors(F_ortho)
     np.testing.assert_allclose(ortho_vifs, 1.0, atol=1e-10)

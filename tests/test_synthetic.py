@@ -41,7 +41,7 @@ def test_end_to_end_pipeline_on_synthetic_data():
     neutral_factors = neutralize_factors(raw_factors, risk, standardize=True)
     assert neutral_factors.shape == (100, 5)
 
-    # 2. Symmetrically orthogonalize using Löwdin
+    # 2. Symmetrically orthogonalize using Lowdin
     final_factors = lowdin_orthogonalize(neutral_factors, standardize=True)
     assert final_factors.shape == (100, 5)
 

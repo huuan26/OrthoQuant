@@ -26,7 +26,7 @@ Throughout this document and codebase, we adhere to the following mathematical c
 
 ---
 
-## 2. Löwdin Symmetric Orthogonalization
+## 2. Lowdin Symmetric Orthogonalization
 
 ### 2.1 Optimization Problem Formulation
 
@@ -86,7 +86,7 @@ This completes the proof. $`\blacksquare`$
 
 ### 2.3 Theorem: Permutation Symmetry (Equivariance)
 
-**Theorem 2.** *Löwdin orthogonalization is permutation equivariant. Let $`\mathbf{P} \in \mathbb{R}^{K \times K}`$ be any $`K \times K`$ permutation matrix ($`\mathbf{P}^T \mathbf{P} = \mathbf{P} \mathbf{P}^T = \mathbf{I}_K`$). If factors are permuted as $`\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}`$, then the orthogonalized factors satisfy:*
+**Theorem 2.** *Lowdin orthogonalization is permutation equivariant. Let $`\mathbf{P} \in \mathbb{R}^{K \times K}`$ be any $`K \times K`$ permutation matrix ($`\mathbf{P}^T \mathbf{P} = \mathbf{P} \mathbf{P}^T = \mathbf{I}_K`$). If factors are permuted as $`\mathbf{F}_{\pi} = \mathbf{F} \mathbf{P}`$, then the orthogonalized factors satisfy:*
 
 $$
 \widetilde{\mathbf{F}}_{\pi} = \widetilde{\mathbf{F}} \mathbf{P} \qquad \text{(4)}
@@ -94,7 +94,7 @@ $$
 
 #### Proof:
 
-By definition of the Löwdin transform on $`\mathbf{F}_{\pi}`$:
+By definition of the Lowdin transform on $`\mathbf{F}_{\pi}`$:
 
 $$\widetilde{\mathbf{F}}_{\pi} = (\mathbf{F} \mathbf{P}) \left((\mathbf{F} \mathbf{P})^T (\mathbf{F} \mathbf{P})\right)^{-1/2} = \mathbf{F} \mathbf{P} (\mathbf{P}^T \mathbf{F}^T \mathbf{F} \mathbf{P})^{-1/2}$$
 
@@ -255,7 +255,7 @@ Dividing by the total sum of squares $`\mathrm{SST} = \lVert \mathbf{y} - \bar{y
 
 ## 5. Academic References & Bibliography
 
-1. **Löwdin, P.-O. (1950).** On the non-orthogonality problem connected with the use of atomic wave functions in the theory of molecules and crystals. *The Journal of Chemical Physics*, 18(3), 365–375.
+1. **Lowdin, P.-O. (1950).** On the non-orthogonality problem connected with the use of atomic wave functions in the theory of molecules and crystals. *The Journal of Chemical Physics*, 18(3), 365–375.
 2. **Frisch, R., & Waugh, F. V. (1933).** Partial time regressions as compared with individual trends. *Econometrica*, 1(4), 387–401.
 3. **Lovell, M. C. (1963).** Seasonal adjustment of economic time series and multiple regression analysis. *Journal of the American Statistical Association*, 58(304), 993–1010.
 4. **Golub, G. H., & Van Loan, C. F. (2013).** *Matrix Computations* (4th ed.). Johns Hopkins University Press.
