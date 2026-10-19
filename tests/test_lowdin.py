@@ -4,12 +4,12 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from alpha_orthogonal.orthogonal import (
+from orthoquant.orthogonal import (
     lowdin_orthogonalize,
     lowdin_correlation_transform,
     gram_schmidt_orthogonalize,
 )
-from alpha_orthogonal.metrics import (
+from orthoquant.metrics import (
     frobenius_distortion,
     condition_number,
     correlation_matrix,

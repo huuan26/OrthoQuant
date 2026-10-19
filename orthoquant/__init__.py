@@ -1,4 +1,4 @@
-"""alpha-orthogonal: Symmetric Factor Orthogonalization and Cross-Sectional Risk Neutralization."""
+"""OrthoQuant: Symmetric Factor Orthogonalization and Cross-Sectional Risk Neutralization."""
 
 __version__ = "0.1.0"
 __author__ = "Phan Bùi Hữu Ân"

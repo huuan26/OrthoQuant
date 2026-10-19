@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from alpha_orthogonal.orthogonal import lowdin_orthogonalize
-from alpha_orthogonal.metrics import (
+from orthoquant.orthogonal import lowdin_orthogonalize
+from orthoquant.metrics import (
     correlation_matrix,
     condition_number,
     variance_inflation_factors,

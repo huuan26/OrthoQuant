@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from alpha_orthogonal.orthogonal import gram_schmidt_orthogonalize
+from orthoquant.orthogonal import gram_schmidt_orthogonalize
 
 
 @pytest.fixture

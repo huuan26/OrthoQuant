@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from alpha_orthogonal.neutralization import (
+from orthoquant.neutralization import (
     neutralize_factors,
     build_sector_exposure_matrix,
 )

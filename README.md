@@ -1,11 +1,11 @@
-# alpha-orthogonal
+# OrthoQuant
 
-[![Test & Lint](https://img.shields.io/badge/CI-Passing-2ea44f?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/huuan26/alpha-orthogonal/actions)
-[![Python Version](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=flat-square&logo=python&logoColor=white)](https://pypi.org/project/alpha-orthogonal/)
-[![Coverage](https://img.shields.io/badge/Coverage-97%25-brightgreen?style=flat-square)](https://github.com/huuan26/alpha-orthogonal)
+[![Test & Lint](https://img.shields.io/badge/CI-Passing-2ea44f?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/huuan26/OrthoQuant/actions)
+[![Python Version](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=flat-square&logo=python&logoColor=white)](https://pypi.org/project/orthoquant/)
+[![Coverage](https://img.shields.io/badge/Coverage-97%25-brightgreen?style=flat-square)](https://github.com/huuan26/OrthoQuant)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-**`alpha-orthogonal`** is a high-performance Python framework for **Symmetric Factor Orthogonalization** and **Cross-Sectional Risk Neutralization** in quantitative alpha research.
+**`OrthoQuant`** is a high-performance Python framework for **Symmetric Factor Orthogonalization** and **Cross-Sectional Risk Neutralization** in quantitative alpha research.
 
 Designed for quantitative researchers, portfolio managers, and statistical arbitrage teams to eliminate multicollinearity across alpha signals while mathematically minimizing signal distortion.
 
@@ -133,8 +133,8 @@ $$R^2_{\text{total}} = \sum_{k=1}^K R^2_k \tag{9}$$
 ## Installation
 
 ```bash
-git clone https://github.com/huuan26/alpha-orthogonal.git
-cd alpha-orthogonal
+git clone https://github.com/huuan26/OrthoQuant.git
+cd OrthoQuant
 pip install -e .
 ```
 
@@ -144,7 +144,7 @@ pip install -e .
 
 ```python
 import pandas as pd
-from alpha_orthogonal import (
+from orthoquant import (
     generate_synthetic_factors,
     neutralize_factors,
     lowdin_orthogonalize,

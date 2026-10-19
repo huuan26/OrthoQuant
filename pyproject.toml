@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "alpha-orthogonal"
+name = "orthoquant"
 version = "0.1.0"
-description = "Symmetric Factor Orthogonalization and Cross-Sectional Risk Neutralization Framework"
+description = "OrthoQuant: Symmetric Factor Orthogonalization and Cross-Sectional Risk Neutralization Framework"
 readme = "README.md"
 authors = [
     { name = "Phan Bùi Hữu Ân", email = "phanbuihuuan261103@gmail.com" }
@@ -47,14 +47,14 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/huuan26/alpha-orthogonal"
-Repository = "https://github.com/huuan26/alpha-orthogonal"
+Homepage = "https://github.com/huuan26/OrthoQuant"
+Repository = "https://github.com/huuan26/OrthoQuant"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["alpha_orthogonal*"]
+include = ["orthoquant*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-addopts = "-v --cov=alpha_orthogonal --cov-report=term-missing"
+addopts = "-v --cov=orthoquant --cov-report=term-missing"

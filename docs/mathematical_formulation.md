@@ -1,6 +1,6 @@
 # Mathematical Formulation & Theoretical Foundations
 
-This document provides rigorous mathematical formulations, proofs, and academic citations for the methods implemented in **`alpha-orthogonal`**.
+This document provides rigorous mathematical formulations, proofs, and academic citations for the methods implemented in **`OrthoQuant`**.
 
 ---
 

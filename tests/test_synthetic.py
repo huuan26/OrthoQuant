@@ -3,9 +3,9 @@
 import pandas as pd
 import pytest
 
-from alpha_orthogonal.data import generate_synthetic_factors
-from alpha_orthogonal.orthogonal import lowdin_orthogonalize
-from alpha_orthogonal.neutralization import neutralize_factors
+from orthoquant.data import generate_synthetic_factors
+from orthoquant.orthogonal import lowdin_orthogonalize
+from orthoquant.neutralization import neutralize_factors
 
 
 def test_synthetic_data_generator_shapes_and_types():
