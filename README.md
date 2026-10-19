@@ -108,7 +108,7 @@ $$\mathrm{ENF} \triangleq \exp\left(-\sum_{k=1}^K p_k \ln(p_k)\right) \tag{8}$$
 - $`\mathrm{ENF} = 1.0`$: Completely collinear factors (rank 1).
 - $`\mathrm{ENF} = K`$: Completely orthogonal factors (maximum spectral entropy).
 
-#### Theorem 5 ($`R^2`$ Additivity Under Orthogonality)
+#### Theorem 5 (R² Additivity Under Orthogonality)
 
 If factors $`\mathbf{Q} \in \mathcal{V}_K(\mathbb{R}^N)`$ are orthonormal ($`\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K`$), then in the multiple regression $`\mathbf{y} = \sum_{k=1}^K \beta_k \mathbf{q}_k + \boldsymbol{\varepsilon}`$, the overall $`R^2`$ decomposes strictly additively:
 

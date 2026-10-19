@@ -185,7 +185,7 @@ where $`R_k^2`$ is the coefficient of determination obtained from regressing $`\
 - **For collinear factors:** $`R_k^2 \to 1 \implies \mathrm{VIF}_k \to \infty`$.
 - **For orthonormal factors:** $`\mathbf{C} = \mathbf{I}_K \implies \mathbf{C}^{-1} = \mathbf{I}_K \implies \mathrm{VIF}_k = 1.0`$ for all $`k \in \{1, \dots, K\}`$.
 
-### 4.2 Matrix Condition Number ($`\kappa`$)
+### 4.2 Matrix Condition Number (κ)
 
 $$\kappa_2(\mathbf{F}) = \frac{\sigma_{\max}(\mathbf{F})}{\sigma_{\min}(\mathbf{F})} \tag{8}$$
 
@@ -210,7 +210,7 @@ $$\mathrm{ENF} \triangleq \exp\left(H(\mathbf{C})\right) \tag{9}$$
 - **Extreme Case 1 (Perfect Collinearity):** $`\lambda_1 = K, \lambda_2 = \dots = \lambda_K = 0 \implies p_1 = 1 \implies H = 0 \implies \mathrm{ENF} = 1.0`$.
 - **Extreme Case 2 (Complete Orthogonality):** $`\lambda_k = 1 \implies p_k = 1/K \implies H = \ln K \implies \mathrm{ENF} = K`$.
 
-### 4.4 Additive Decomposition of Multiple $`R^2`$ Under Orthogonality
+### 4.4 Additive Decomposition of Multiple R² Under Orthogonality
 
 **Theorem 5.** *Let $`\mathbf{Q} = [\mathbf{q}_1, \dots, \mathbf{q}_K] \in \mathbb{R}^{N \times K}`$ be an orthonormal factor matrix ($`\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_K`$). In the linear model $`\mathbf{y} = \mathbf{Q} \boldsymbol{\beta} + \boldsymbol{\varepsilon}`$, the total regression coefficient of determination $`R^2_{\text{total}}`$ decomposes additively without interaction terms:*
 
