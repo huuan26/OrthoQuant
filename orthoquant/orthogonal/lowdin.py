@@ -38,19 +38,20 @@ References:
 from typing import Tuple, Union
 import numpy as np
 import pandas as pd
+import polars as pl
 
 
 def lowdin_orthogonalize(
-    factors: Union[np.ndarray, pd.DataFrame],
+    factors: Union[np.ndarray, pd.DataFrame, pl.DataFrame],
     method: str = "svd",
     rcond: float = 1e-12,
     standardize: bool = False,
-) -> Union[np.ndarray, pd.DataFrame]:
+) -> Union[np.ndarray, pd.DataFrame, pl.DataFrame]:
     """Perform Lowdin symmetric orthogonalization on a factor matrix.
 
     Parameters
     ----------
-    factors : np.ndarray or pd.DataFrame, shape (N, K)
+    factors : np.ndarray, pd.DataFrame, or pl.DataFrame, shape (N, K)
         Factor matrix where N is the number of assets and K is the number of factors.
     method : str, default 'svd'
         Algorithm to compute the orthogonal basis:
@@ -66,9 +67,9 @@ def lowdin_orthogonalize(
 
     Returns
     -------
-    np.ndarray or pd.DataFrame
-        Orthonormal factor matrix F_tilde of shape (N, K). Preserves DataFrame index
-        and column names if input is a DataFrame.
+    np.ndarray, pd.DataFrame, or pl.DataFrame
+        Orthonormal factor matrix F_tilde of shape (N, K). Preserves DataFrame index/schema
+        and column names if input is a pandas or Polars DataFrame.
 
     Raises
     ------
@@ -76,11 +77,15 @@ def lowdin_orthogonalize(
         If factors have fewer assets than factors (N < K), contain NaNs/Infs,
         or are rank-deficient beyond rcond threshold.
     """
-    is_df = isinstance(factors, pd.DataFrame)
-    if is_df:
+    is_pd = isinstance(factors, pd.DataFrame)
+    is_pl = isinstance(factors, pl.DataFrame)
+    if is_pd:
         index = factors.index
         columns = factors.columns
         X = factors.to_numpy(dtype=float, copy=True)
+    elif is_pl:
+        columns = list(factors.columns)
+        X = factors.to_numpy().astype(float, copy=True)
     else:
         X = np.asarray(factors, dtype=float)
 
@@ -134,15 +139,17 @@ def lowdin_orthogonalize(
         # Scale each orthonormal column to exact unit sample variance (ddof=1)
         X_tilde = X_tilde * np.sqrt(n_samples - 1)
 
-    if is_df:
+    if is_pd:
         return pd.DataFrame(X_tilde, index=index, columns=columns)
+    if is_pl:
+        return pl.DataFrame(X_tilde, schema=columns)
     return X_tilde
 
 
 def lowdin_correlation_transform(
-    factors: Union[np.ndarray, pd.DataFrame],
+    factors: Union[np.ndarray, pd.DataFrame, pl.DataFrame],
     rcond: float = 1e-12,
-) -> Union[np.ndarray, pd.DataFrame]:
+) -> Union[np.ndarray, pd.DataFrame, pl.DataFrame]:
     """Compute Lowdin symmetric orthogonalization in the correlation space.
 
     First centers and scales factors to zero-mean and unit-variance, then transforms
@@ -150,21 +157,25 @@ def lowdin_correlation_transform(
 
     Parameters
     ----------
-    factors : np.ndarray or pd.DataFrame, shape (N, K)
+    factors : np.ndarray, pd.DataFrame, or pl.DataFrame, shape (N, K)
         Factor matrix of N assets and K signals.
     rcond : float, default 1e-12
         Cutoff for eigenvalue positivity.
 
     Returns
     -------
-    np.ndarray or pd.DataFrame
+    np.ndarray, pd.DataFrame, or pl.DataFrame
         Correlation-orthogonalized factor matrix with zero pairwise cross-correlations.
     """
-    is_df = isinstance(factors, pd.DataFrame)
-    if is_df:
+    is_pd = isinstance(factors, pd.DataFrame)
+    is_pl = isinstance(factors, pl.DataFrame)
+    if is_pd:
         index = factors.index
         columns = factors.columns
         X = factors.to_numpy(dtype=float, copy=True)
+    elif is_pl:
+        columns = list(factors.columns)
+        X = factors.to_numpy().astype(float, copy=True)
     else:
         X = np.asarray(factors, dtype=float).copy()
 
@@ -189,6 +200,8 @@ def lowdin_correlation_transform(
     C_inv_sqrt = (V * (1.0 / np.sqrt(eigenvals))) @ V.T
     Z_ortho = Z @ C_inv_sqrt
 
-    if is_df:
+    if is_pd:
         return pd.DataFrame(Z_ortho, index=index, columns=columns)
+    if is_pl:
+        return pl.DataFrame(Z_ortho, schema=columns)
     return Z_ortho

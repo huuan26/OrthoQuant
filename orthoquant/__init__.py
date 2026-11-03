@@ -1,6 +1,6 @@
 """OrthoQuant: Symmetric Factor Orthogonalization and Cross-Sectional Risk Neutralization."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Phan Bùi Hữu Ân"
 
 from .orthogonal import (
@@ -22,6 +22,12 @@ from .metrics import (
     marginal_r_squared,
 )
 from .data import generate_synthetic_factors
+from .panel import (
+    PanelOrthogonalityReport,
+    extract_polars_anta_factors,
+    panel_neutralize_and_orthogonalize,
+    evaluate_panel_orthogonality,
+)
 
 __all__ = [
     "__version__",
@@ -39,4 +45,8 @@ __all__ = [
     "information_coefficient",
     "marginal_r_squared",
     "generate_synthetic_factors",
+    "PanelOrthogonalityReport",
+    "extract_polars_anta_factors",
+    "panel_neutralize_and_orthogonalize",
+    "evaluate_panel_orthogonality",
 ]
