@@ -200,6 +200,49 @@ print("\nOrthonormal Factors Rank IC:\n", rank_ic)
 
 ---
 
+## Multi-Period Polars & `polars-anta` Panel Pipeline
+
+`OrthoQuant` natively integrates with [`polars-anta`](https://github.com/huuan26/polars-anta) to extract technical, microstructure (`VPIN`), and WorldQuant formulaic alphas directly from multi-asset Polars OHLCV panels, execute cross-sectional Frisch-Waugh-Lovell neutralization + Lowdin SVD orthogonalization across every timestamp slice, and evaluate Newey-West HAC Information Coefficients:
+
+```python
+from orthoquant import (
+    extract_polars_anta_factors,
+    panel_neutralize_and_orthogonalize,
+    evaluate_panel_orthogonality,
+)
+
+# 1. Extract and MAD-winsorize / z-score multi-factor signals via polars-anta
+enriched_panel, factor_cols = extract_polars_anta_factors(
+    ohlcv_pl_df,
+    symbol_col="symbol",
+    time_col="timestamp",
+    period=10,
+)
+
+# 2. Cross-sectional FWL Thin-QR neutralization & Lowdin SVD across each timestamp
+ortho_panel = panel_neutralize_and_orthogonalize(
+    enriched_panel,
+    factor_cols=factor_cols,
+    risk_cols=["beta"],
+    sector_col="sector",
+    method="lowdin",
+    standardize=True,
+)
+
+# 3. Audit panel VIF -> 1.00, condition number -> 1.00, and Newey-West Rank IC
+report = evaluate_panel_orthogonality(
+    ortho_panel,
+    raw_factor_cols=factor_cols,
+    ortho_factor_cols=[f"{c}_ortho" for c in factor_cols],
+    forward_return_col="fwd_ret",
+    nw_lags=5,
+)
+print(report.to_dict())
+print(report.ic_summary_table)
+```
+
+---
+
 ## Testing & Verification
 
 Run the comprehensive test suite with coverage:
