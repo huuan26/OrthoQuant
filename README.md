@@ -3,7 +3,6 @@
 [![Test & Lint](https://img.shields.io/badge/CI-Passing-2ea44f?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/huuan26/OrthoQuant/actions)
 [![Python Version](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=flat-square&logo=python&logoColor=white)](https://pypi.org/project/orthoquant/)
 [![Coverage](https://img.shields.io/badge/Coverage-97%25-brightgreen?style=flat-square)](https://github.com/huuan26/OrthoQuant)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 **`OrthoQuant`** is a high-performance Python framework for **Symmetric Factor Orthogonalization** and **Cross-Sectional Risk Neutralization** in quantitative alpha research.
 
