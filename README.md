@@ -9,7 +9,7 @@
 
 Designed for quantitative researchers, portfolio managers, and statistical arbitrage teams to eliminate multicollinearity across alpha signals while mathematically minimizing signal distortion.
 
-> 📖 **Full Mathematical Derivations**: Complete proofs, lemmas, and spectral analyses are documented in [docs/mathematical_formulation.md](docs/mathematical_formulation.md).
+> **Full Mathematical Derivations**: Complete proofs, lemmas, and spectral analyses are documented in [docs/mathematical_formulation.md](docs/mathematical_formulation.md).
 
 ---
 
